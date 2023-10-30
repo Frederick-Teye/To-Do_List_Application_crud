@@ -42,5 +42,10 @@ def main():
         menu()
 
 
-
-    
+""" The main function 
+creates to-do_list.db, which is the database for the program if none
+exists. After creating the database, it creates the the table that will
+be used in this program. The table's name is To-do_list. If the database
+already exists, then the main function will go ahead and update the 
+status for all the rows in the table by calling the update_status 
+function and then call the menu function."""
