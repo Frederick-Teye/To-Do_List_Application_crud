@@ -165,7 +165,9 @@ def menu():
 
 def item_status(days_left):
     days = int(days_left)
-    if days == 0:
+    if days < 0:
+        return "Overdue"
+    elif days == 0:
         return "In progress"
     else:
         return "Pending"
@@ -178,10 +180,12 @@ def days_lft(due_date):
 
 
 def item_status_number(status):
-    if status == "In progress":
-        return 0
-    else:
+    if status == "Pending":
         return 1
+    elif status == "In progress":
+        return 2
+    else:
+        return 3
 
 
 def add_new_item():
@@ -287,7 +291,7 @@ def get_month():
         user_input = input("\nYou can enter the number or the three-letter abbreviation for the month \n"
                            "(e.g., '1' or 'Jan', '3' or 'Mar' or '11' or 'Nov'):").strip().capitalize()
 
-        if user_input in months:
+        if user_input in months and int(user_input):
             return months[user_input]
         else:
             print("Invalid input... Please enter a valid month or its number.")
