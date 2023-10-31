@@ -74,7 +74,7 @@ def update_status():
                 days_remaining = date.fromisoformat(row[1]) - date.today()
 
                 # save the outcome string into a list by splitting at where there are spaces
-                days_remaining_list = days_remaining.split(" ")
+                days_remaining_list = days_remaining.__str__().split(" ")
 
                 # we want only the number of days overdue or remaining
                 days_remaining = int(days_remaining_list[0])
