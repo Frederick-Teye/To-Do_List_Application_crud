@@ -223,7 +223,7 @@ def add_new_item():
 
     conn = None
     try:
-        conn = sqlite3.connect()
+        conn = sqlite3.connect(db_path)
         cur = conn.cursor()
 
         sql = """INSERT INTO To-do_list (Description, DueDate, DaysLeftOrDue,
@@ -296,6 +296,30 @@ def get_month():
         else:
             print("Invalid input... Please enter a valid month or its number.")
 
+
+def view_items():
+    conn = None
+    try:
+        conn = sqlite3.connect(db_path)
+        cur = conn.cursor()
+
+        cur.execute("SELECT * FROM To-do_list")
+
+        # save the output in a variable
+        result = cur.fetchall()
+
+        # check if there is any data in results before printing them
+        if len(result) > 0:
+            print("        Description      Due Date    Days Left/Overdue   Priority   Status\n"
+                  "--------------------------------------------------------------------------")
+            for row in result:
+                print(f"{row[1]:20} {row[2]:10} {row[3]:3} {row[4]:10} {row[6]:8}")
+    except sqlite3.Error as err:
+        print(err)
+    finally:
+        # close connection
+        if conn is not None:
+            conn.close()
 
 
 
