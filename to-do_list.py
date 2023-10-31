@@ -163,5 +163,61 @@ def menu():
         menu()
 
 
+def add_new_item():
+    description = input("Enter a short description for this to-do item: ")
+    due_date = get_due_date()  # this function gets t date from the user and return value
+
+    days_left = days_left(date)  # this function returns the number of days left
+
+    status = item_status(days_left)  # return status of the item description
+
+    status_number = item_status_number(status)  # returns the status number
+
+    priority = ""
+    priority_number = ""
+
+    priority_dict = {"1": ["High", 1], "2": ["Medium", 2], "3": ["Low", 3]}
+
+    priority_selection = input("1. Critical / High\n"
+                               "2. Normal / Medium\n"
+                               "3. Optional / Low\n"
+                               "Enter your choice: ")
+
+    while True:
+        if priority_selection in priority_dict:
+            priority = priority_dict[priority_selection[0]]
+            priority_number = priority_dict[priority_selection[1]]
+            break
+        else:
+            print("Invalid input...\n"
+                  "Enter either 1, 2, or 3")
+            priority_selection = input("1. Critical / High\n"
+                                       "2. Normal / Medium\n"
+                                       "3. Optional / Low\n"
+                                       "Enter your choice: ")
+
+    conn = None
+    try:
+        conn = sqlite3.connect()
+        cur = conn.cursor()
+
+        sql = """INSERT INTO To-do_list (Description, DueDate, DaysLeftOrDue,
+                                         Priority, PriorityNumber, Status, StatusNumber)
+                                  VALUES(?, ?, ?, ?, ?, ?, ?)"""
+
+        cur.execute(sql, (description, due_date, days_left, priority,
+                          priority_number, status, status_number))
+
+        # commit data added
+        conn.commit()
+    except sqlite3.Error as err:
+        print(err)
+    finally:
+        # close connection
+        if conn is not None:
+            conn.close()
+
+
+
 
 
