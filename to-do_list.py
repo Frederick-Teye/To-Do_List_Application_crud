@@ -163,11 +163,32 @@ def menu():
         menu()
 
 
+def item_status(days_left):
+    days = int(days_left)
+    if days == 0:
+        return "In progress"
+    else:
+        return "Pending"
+
+
+def days_lft(due_date):
+    days_in_sentence = due_date - date.today()
+    days = days_in_sentence.split(" ")
+    return abs(int(days[0]))
+
+
+def item_status_number(status):
+    if status == "In progress":
+        return 0
+    else:
+        return 1
+
+
 def add_new_item():
     description = input("Enter a short description for this to-do item: ")
     due_date = get_due_date()  # this function gets t date from the user and return value
 
-    days_left = days_left(date)  # this function returns the number of days left
+    days_left = days_lft(due_date)  # this function returns the number of days left
 
     status = item_status(days_left)  # return status of the item description
 
@@ -270,6 +291,10 @@ def get_month():
             return months[user_input]
         else:
             print("Invalid input... Please enter a valid month or its number.")
+
+
+
+
 
 
 
