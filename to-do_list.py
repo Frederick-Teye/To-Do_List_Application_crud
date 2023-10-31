@@ -119,6 +119,48 @@ def update_status():
             conn.close()
 
 
+def menu():
+    count = 0
+    if count == 0:
+        print("        To-Do List Menu       \n"
+              "------------------------------")
+        option = input("1. Add new to-do item to list\n"
+                       "2. View all to-do items in list\n"
+                       "3. View a specific to-do item\n"
+                       "4. Edit/Update a to-do item\n"
+                       "5. Delete to-do item(s) in list\n"
+                       "6. Exit application\n"
+                       "Enter your choice: ")
+        count += 1
+    else:
+        print("\n        To-Do List Menu       \n"
+              "------------------------------")
+        option = input("1. Add new to-do item to list\n"
+                       "2. View all to-do items in list\n"
+                       "3. View a specific to-do item\n"
+                       "4. Edit/Update a to-do item\n"
+                       "5. Delete to-do item(s) in list\n"
+                       "6. Exit application\n"
+                       "Enter your choice: ")
+        # I won't add 1 to count again, because at this point I have achieved what I want to achieve
+        # with the count variable, which is to add space before the second menu
+
+    if option == "1":
+        add_new_item()
+    elif option == "2":
+        view_items()
+    elif option == "3":
+        view_an_item()
+    elif option == "4":
+        update_a_list_item()
+    elif option == "5":
+        delete_item()
+    elif option == "6":
+        exit_application()
+    else:
+        print("\nInvalid input..."
+              "\nPlease enter either 1, 2, 3, 4, 5 or 6")
+        menu()
 
 
 
