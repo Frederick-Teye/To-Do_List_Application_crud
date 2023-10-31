@@ -16,14 +16,16 @@ def main():
             cur = conn.cursor()
 
             # sql statement to create To-do_list table
-            sql = """CREATE TABLE To-do_list (To-do_ID INTEGER PRIMARY KEY NOT NULL, 
-                                              Description TEXT NOT NULL,
-                                              DueDate TEXT NOT NULL,
-                                              DaysLeftOrOverdue INTEGER NOT NULL,
-                                              Priority TEXT NOT NULL,
-                                              PriorityNumber INTEGER NOT NULL,
-                                              Status TEXT NOT NULL,
-                                              StatusNumber INTEGER NOT NULL)"""
+            sql = """CREATE TABLE "To-do_list" (
+                        "To-do_ID" INTEGER PRIMARY KEY AUTOINCREMENT,
+                        "Description" TEXT NOT NULL,
+                        "DueDate" TEXT NOT NULL,
+                        "DaysLeftOrOverdue" INTEGER NOT NULL,
+                        "Priority" TEXT NOT NULL,
+                        "PriorityNumber" INTEGER NOT NULL,
+                        "Status" TEXT NOT NULL,
+                        "StatusNumber" INTEGER NOT NULL
+                    )"""
 
             # create To-do_list table
             cur.execute(sql)
@@ -40,7 +42,7 @@ def main():
     else:
         # if the database file already exists, then update all the status and status number column
         update_status()
-        menu()
+    menu()
 
 
 """ 
@@ -61,7 +63,7 @@ def update_status():
         cur = conn.cursor()
 
         # read only To-do_ID and DueDate from each row in database for
-        cur.execute("SELECT To-do_ID, DueDate, Status FROM To-do_list")
+        cur.execute("SELECT 'To-do_ID', 'DueDate', 'Status' FROM 'To-do_list'")
 
         # save the data in a variable
         results = cur.fetchall()
@@ -142,8 +144,7 @@ def menu():
                        "5. Delete to-do item(s) in list\n"
                        "6. Exit application\n"
                        "Enter your choice: ")
-        # I won't add 1 to count again, because at this point I have achieved what I want to achieve
-        # with the count variable, which is to add space before the second menu
+        count += 1
 
     if option == "1":
         add_new_item()
@@ -174,9 +175,14 @@ def item_status(days_left):
 
 
 def days_lft(due_date):
-    days_in_sentence = due_date - date.today()
-    days = days_in_sentence.split(" ")
-    return abs(int(days[0]))
+    try:
+        days_in_sentence = date.fromisoformat(due_date) - date.today()
+        days = days_in_sentence.__str__().split(" ")
+        return abs(int(days[0]))
+    except ValueError as err:
+        print()
+        print(err)
+        get_due_date()
 
 
 def item_status_number(status):
@@ -210,8 +216,8 @@ def add_new_item():
 
     while True:
         if priority_selection in priority_dict:
-            priority = priority_dict[priority_selection[0]]
-            priority_number = priority_dict[priority_selection[1]]
+            priority = priority_dict[priority_selection][0]
+            priority_number = priority_dict[priority_selection][1]
             break
         else:
             print("Invalid input...\n"
@@ -226,8 +232,8 @@ def add_new_item():
         conn = sqlite3.connect(db_path)
         cur = conn.cursor()
 
-        sql = """INSERT INTO To-do_list (Description, DueDate, DaysLeftOrDue,
-                                         Priority, PriorityNumber, Status, StatusNumber)
+        sql = """INSERT INTO 'To-do_list' ('Description', 'DueDate', 'DaysLeftOrOverDue',
+                                         'Priority', 'PriorityNumber', 'Status', 'StatusNumber')
                                   VALUES(?, ?, ?, ?, ?, ?, ?)"""
 
         cur.execute(sql, (description, due_date, days_left, priority,
@@ -242,6 +248,9 @@ def add_new_item():
         if conn is not None:
             conn.close()
 
+        # call menu function
+        menu()
+
 # define all the functions used in add_new_item()
 # the operations that this functions perform will be needed in other functions,
 # that is why I have put those operations inside a function so that they can
@@ -254,10 +263,10 @@ def get_due_date():
     # get day
     day = input("\nEnter day: ").strip()
     while True:
-        if day.isnumeric():
+        if day.isnumeric() and int(day) in range(1, 32):
             break
         else:
-            print("\nYou can only enter numbers")
+            print("\nYou can only enter numbers between 1 and 31")
             day = input("Enter day: ").strip()
 
     month = get_month()
@@ -289,9 +298,9 @@ def get_month():
 
     while True:
         user_input = input("\nYou can enter the number or the three-letter abbreviation for the month \n"
-                           "(e.g., '1' or 'Jan', '3' or 'Mar' or '11' or 'Nov'):").strip().capitalize()
+                           "(e.g., '1' or 'Jan', '3' or 'Mar' or '11' or 'Nov'): ").strip().capitalize()
 
-        if user_input in months and int(user_input):
+        if user_input in months:
             return months[user_input]
         else:
             print("Invalid input... Please enter a valid month or its number.")
@@ -303,17 +312,17 @@ def view_items():
         conn = sqlite3.connect(db_path)
         cur = conn.cursor()
 
-        cur.execute("SELECT * FROM To-do_list")
+        cur.execute("SELECT * FROM 'To-do_list'")
 
         # save the output in a variable
         result = cur.fetchall()
 
         # check if there is any data in results before printing them
         if len(result) > 0:
-            print("        Description      Due Date    Days Left/Overdue   Priority   Status\n"
-                  "--------------------------------------------------------------------------")
+            print("        Description            Due Date      Days Left/Overdue   Priority     Status\n"
+                  "------------------------------------------------------------------------------------")
             for row in result:
-                print(f"{row[1]:20} {row[2]:10} {row[3]:3} {row[4]:10} {row[6]:8}")
+                print(f"{row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
     except sqlite3.Error as err:
         print(err)
     finally:
@@ -321,8 +330,12 @@ def view_items():
         if conn is not None:
             conn.close()
 
+        # call the menu function, the user might need it
+        print()
+        menu()
 
 
 
 
 
+main()
