@@ -217,7 +217,59 @@ def add_new_item():
         if conn is not None:
             conn.close()
 
+# define all the functions used in add_new_item()
+# the operations that this functions perform will be needed in other functions,
+# that is why I have put those operations inside a function so that they can
+# be called whenever needed.
 
+
+def get_due_date():
+    print("\nAt this point, you will be asked to enter day, month, then year...")
+
+    # get day
+    day = input("\nEnter day: ").strip()
+    while True:
+        if day.isnumeric():
+            break
+        else:
+            print("\nYou can only enter numbers")
+            day = input("Enter day: ").strip()
+
+    month = get_month()
+
+    while True:
+        year = input("Enter year: ")
+        if len(year) == 4 and year.isnumeric() and int(year) >= date.today().year:
+            return f"{year}-{month}-{day.zfill(2)}"
+            # .zfill(2) is to pad the day with a zero if it is only a single digit
+        else:
+            print(f"You can't enter a year below {date.today().year} or non-numeric characters\n")
+
+
+def get_month():
+    months = {
+        "1": "01", "Jan": "01",
+        "2": "02", "Feb": "02",
+        "3": "03", "Mar": "03",
+        "4": "04", "Apr": "04",
+        "5": "05", "May": "05",
+        "6": "06", "Jun": "06",
+        "7": "07", "Jul": "07",
+        "8": "08", "Aug": "08",
+        "9": "09", "Sep": "09",
+        "10": "10", "Oct": "10",
+        "11": "11", "Nov": "11",
+        "12": "12", "Dec": "12"
+    }
+
+    while True:
+        user_input = input("\nYou can enter the number or the three-letter abbreviation for the month \n"
+                           "(e.g., '1' or 'Jan', '3' or 'Mar' or '11' or 'Nov'):").strip().capitalize()
+
+        if user_input in months:
+            return months[user_input]
+        else:
+            print("Invalid input... Please enter a valid month or its number.")
 
 
 
