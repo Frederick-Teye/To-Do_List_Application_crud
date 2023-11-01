@@ -324,9 +324,9 @@ def view_items():
 
 
 def view_an_item():
-    user_choice = input("\n1. View by inputting the description\n"
-                        "2. View list item(s) with a specific priority\n"
-                        "3. View lists item(s) based status\n"
+    user_choice = input("\n1. Search by inputting the description\n"
+                        "2. Search list item(s) with a specific priority\n"
+                        "3. Search list item(s) with a specific status\n"
                         "Enter your choice: ").strip()
     if user_choice == "1":
         view_by_desc()
@@ -340,10 +340,9 @@ def view_an_item():
 
 
 def view_by_desc():
-    user_choice = input("\nView by entering characters that...\n"
+    user_choice = input("\nSearch by entering characters that...\n"
                         "1. Start the description\n"
-                        "2. Are in the middle of the description\n"
-                        "3. End the description\n"
+                        "2. End the description\n"
                         "4. Are somewhere in the description/make up the description\n"
                         "Enter your choice: ").strip()
     if user_choice == "1":
@@ -379,40 +378,8 @@ def view_by_desc():
             if will_you == "m":
                 print()
                 menu()
+
     elif user_choice == "2":
-        input_start_str = input("Enter the characters that is in the middle of the description: ").strip().lower()
-        start_str = f"%{input_start_str}%"
-        conn = None
-        try:
-            conn = sqlite3.connect(db_path)
-            cur = conn.cursor()
-            cur.execute("""SELECT * FROM "To-do_list" WHERE lower(Description) LIKE ?""",
-                        (start_str,))
-            result = cur.fetchall()
-
-            # check if there is any data in results before printing them
-            if len(result) > 0:
-                print()
-                print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
-                      "------------------------------------------------------------------------------------------")
-                for row in result:
-                    print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
-            else:
-                print("There is no description that has those characters in it's middle")
-        except sqlite3.Error as err:
-            print(err)
-        finally:
-            # close connection
-            if conn is not None:
-                conn.close()
-
-            # call the menu function, the user might need it
-            print()
-            will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
-            if will_you == "m":
-                print()
-                menu()
-    elif user_choice == "3":
         input_start_str = input("Enter the characters that end of the description: ").strip().lower()
         start_str = f"%{input_start_str}"
         conn = None
@@ -444,7 +411,7 @@ def view_by_desc():
             if will_you == "m":
                 print()
                 menu()
-    elif user_choice == "4":
+    elif user_choice == "3":
         input_start_str = input("Enter the characters that are somewhere in the "
                                 "description/make up the description: ").strip().lower()
         start_str = f"%{input_start_str}%"
@@ -485,9 +452,9 @@ def view_by_desc():
 
 def view_by_priority():
     print("\nList items with what priority do you want to view?")
-    user_choice = input("\n1. Critical / High\n"
-                        "2. Normal / Medium\n"
-                        "3. Optional / Low\n"
+    user_choice = input("\n1. Critical/High\n"
+                        "2. Normal/Medium\n"
+                        "3. Optional/Low\n"
                         "Enter your choice:  ")
 
     if user_choice == "1":
@@ -583,9 +550,9 @@ def view_by_priority():
 
 
 def view_by_status():
-    user_choice = input("\n1. To view pending to-do items\n"
-                        "2. To view to-do items that are in progress\n"
-                        "3. To view to-do items that are overdue\n"
+    user_choice = input("\n1. View pending to-do items\n"
+                        "2. View to-do items that are in progress\n"
+                        "3. View to-do items that are overdue\n"
                         "Enter your choice here: ").strip()
     if user_choice == "1":
         conn = None
@@ -733,7 +700,7 @@ def update_description(id_chosen):
             print(f"To-do item with ID {id_chosen} have successfully been changed...\n")
         else:
             # if the is no item in the variable result
-            print("To-do item with such ID not found...")
+            print("To-do item with such ID not found...\n")
             go_back = input("Enter 'b' to go back to update list item menu,\n"
                             "'m' to go to main menu or enter key to quit: ").strip().lower()
             if go_back == 'b':
