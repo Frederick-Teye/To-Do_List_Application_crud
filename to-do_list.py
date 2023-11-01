@@ -245,6 +245,7 @@ def add_new_item():
         # call menu function
         menu()
 
+
 # define all the functions used in add_new_item()
 # the operations that this functions perform will be needed in other functions,
 # that is why I have put those operations inside a function so that they can
@@ -388,14 +389,14 @@ def view_by_desc():
                 menu()
 
     elif user_choice == "2":
-        input_start_str = input("Enter the characters that end of the description: ").strip().lower()
-        start_str = f"%{input_start_str}"
+        input_end_str = input("Enter the characters that end of the description: ").strip().lower()
+        end_str = f"%{input_end_str}"
         conn = None
         try:
             conn = sqlite3.connect(db_path)
             cur = conn.cursor()
             cur.execute("""SELECT * FROM "To-do_list" WHERE lower(Description) LIKE ?""",
-                        (start_str,))
+                        (end_str,))
             result = cur.fetchall()
 
             # check if there is any data in results before printing them
@@ -420,15 +421,15 @@ def view_by_desc():
                 print()
                 menu()
     elif user_choice == "3":
-        input_start_str = input("Enter the characters that are somewhere in the "
-                                "description/make up the description: ").strip().lower()
-        start_str = f"%{input_start_str}%"
+        input_a_str = input("Enter the characters that are somewhere in the "
+                            "description/make up the description: ").strip().lower()
+        a_str = f"%{input_a_str}%"
         conn = None
         try:
             conn = sqlite3.connect(db_path)
             cur = conn.cursor()
             cur.execute("""SELECT * FROM "To-do_list" WHERE lower(Description) LIKE ?""",
-                        (start_str,))
+                        (a_str,))
             result = cur.fetchall()
 
             # check if there is any data in results before printing them
@@ -481,7 +482,7 @@ def view_by_priority():
                 for row in result:
                     print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
             else:
-                print("There to-do item that has a Critical/High priority...")
+                print("There is no To-do item that has a Critical/High priority...")
         except sqlite3.Error as err:
             print(err)
         finally:
@@ -511,7 +512,7 @@ def view_by_priority():
                 for row in result:
                     print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
             else:
-                print("There to-do item that has a Normal/Medium priority...")
+                print("There is no To-do item that has a Normal/Medium priority...")
         except sqlite3.Error as err:
             print(err)
         finally:
@@ -525,7 +526,7 @@ def view_by_priority():
             if will_you == "m":
                 print()
                 menu()
-    if user_choice == "2":
+    if user_choice == "3":
         conn = None
         try:
             conn = sqlite3.connect(db_path)
@@ -541,7 +542,7 @@ def view_by_priority():
                 for row in result:
                     print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
             else:
-                print("There to-do item that has a Optional/Low priority...")
+                print("There is no To-do item that has a Optional/Low priority...")
         except sqlite3.Error as err:
             print(err)
         finally:
@@ -578,7 +579,7 @@ def view_by_status():
                 for row in result:
                     print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
             else:
-                print("There to-do item that has a pending status...")
+                print("There is no To-do item that has a pending status...")
         except sqlite3.Error as err:
             print(err)
         finally:
@@ -608,7 +609,7 @@ def view_by_status():
                 for row in result:
                     print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
             else:
-                print("There to-do item that has a status 'In progress'...")
+                print("There is no To-do item that has a status 'In progress'...")
         except sqlite3.Error as err:
             print(err)
         finally:
@@ -638,7 +639,7 @@ def view_by_status():
                 for row in result:
                     print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
             else:
-                print("There to-do item that has a status 'Overdue'...")
+                print("There is no To-do item that has a status 'Overdue'...")
         except sqlite3.Error as err:
             print(err)
         finally:
@@ -795,6 +796,54 @@ def update_due_date(id_chosen):
                 menu()
 
 
+def update_priority(id_chosen):
+    # first of all, check if there is such ID in the table in the database
+    conn = None
+    try:
+        conn = sqlite3.connect(db_path)
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM `To-do_list` WHERE `To-do_ID` = ?", (id_chosen,))
+
+        # save the result in a variable
+        result = cur.fetchall()
+
+        # check if there is something in result
+        if len(result) > 0:
+            while True:
+                priority_dict = {"1": "High", "2": "Medium", "3": "Low"}
+                # then we can change the priority
+                priority_choice = input("\n1. Critical/High\n"
+                                        "2. Normal/Medium\n"
+                                        "3. Optional/Low\n"
+                                        "Enter your choice: ").strip()
+                if priority_choice in priority_dict:
+                    cur.execute("""UPDATE `To-do_list`
+                                       SET Priority = ?
+                                       WHERE `To-do_ID` == ?""",
+                                (priority_dict[priority_choice], id_chosen))
+                    conn.commit()
+                    print(f"\nTo-do item with ID {id_chosen} have successfully been changed...\n")
+                    break
+                else:
+                    print("Invalid input... Enter 1, 2 or 3...\n")
+        else:
+            # if the is no item in the variable result
+            print("To-do item with such ID not found...\n")
+            go_back = input("Enter 'b' to go back to update list item menu,\n"
+                            "'m' to go to main menu or enter key to quit: ").strip().lower()
+            if go_back == 'b':
+                update_a_list_item()
+            elif go_back == 'm':
+                menu()
+    except sqlite3.Error as err:
+        print()
+        print("SQLite error:", err)
+    finally:
+        if conn is not None:
+            conn.close()
+            go_to_menu = input("Hit enter key to quit application or 'm' to go to main menu: ").strip().lower()
+            if go_to_menu == "m":
+                menu()
 
 
 main()
