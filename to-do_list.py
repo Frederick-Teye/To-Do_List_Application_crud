@@ -82,20 +82,30 @@ def update_status():
                 # if the status of the data is not completed or overdue
                 # then update the status, while you updated days remaining too.
                 # Put all these updates and To-do_ID into the update list
-                if row[2] != "Completed" and row[2] != "Overdue":
-                    if days_remaining < 0:
-                        abs_days_remaining = abs(days_remaining)
-                        update.append((abs_days_remaining, "Overdue", 3, row[0]))
-                    elif days_remaining == 0:
-                        update.append((days_remaining, "In progress", 2, row[0]))
-                    else:
-                        update.append((days_remaining, "Pending", 1, row[0]))
-                elif row[2] == "Completed":
+                # if row[2] != "Completed" and row[2] != "Overdue":
+                #     if days_remaining < 0:
+                #         abs_days_remaining = abs(days_remaining)
+                #         update.append((abs_days_remaining, "Overdue", 3, row[0]))
+                #     elif days_remaining == 0:
+                #         update.append((days_remaining, "In progress", 2, row[0]))
+                #     else:
+                #         update.append((days_remaining, "Pending", 1, row[0]))
+                # elif row[2] == "Completed":
+                #     abs_days_remaining = abs(days_remaining)
+                #     update.append((abs_days_remaining, "Completed", 4, row[0]))
+                # else:
+                #     abs_days_remaining = abs(days_remaining)
+                #     update.append((abs_days_remaining, "Overdue", 4, row[0]))
+
+                # I want to be able to call this function when updating due_date
+                # and I saw that I have to make this change in the code.
+                if days_remaining < 0:
                     abs_days_remaining = abs(days_remaining)
-                    update.append((abs_days_remaining, "Completed", 4, row[0]))
+                    update.append((abs_days_remaining, "Overdue", 3, row[0]))
+                elif days_remaining == 0:
+                    update.append((days_remaining, "In progress", 2, row[0]))
                 else:
-                    abs_days_remaining = abs(days_remaining)
-                    update.append((abs_days_remaining, "Overdue", 4, row[0]))
+                    update.append((days_remaining, "Pending", 1, row[0]))
 
             # update all the rows in the database.
             for row in update:
@@ -341,7 +351,7 @@ def view_by_desc():
     user_choice = input("\nSearch by entering characters that...\n"
                         "1. Start the description\n"
                         "2. End the description\n"
-                        "4. Are somewhere in the description/make up the description\n"
+                        "3. Are somewhere in the description/make up the description\n"
                         "Enter your choice: ").strip()
     if user_choice == "1":
         input_start_str = input("Enter the characters that starts the description: ").strip().lower()
@@ -678,7 +688,7 @@ def update_a_list_item():
             else:
                 print("You have to enter a number...")
                 id_chosen = input("Enter ID No. of the item you want to change it date: ").strip()
-        update_duedate(int(id_chosen))
+        update_due_date(int(id_chosen))
     elif user_choice == "3":
         pass
     else:
@@ -706,7 +716,54 @@ def update_description(id_chosen):
                            WHERE `To-do_ID` == ?""",
                         (new_description, id_chosen))
             conn.commit()
-            print(f"To-do item with ID {id_chosen} have successfully been changed...\n")
+            print(f"\nTo-do item with ID {id_chosen} have successfully been changed...\n")
+        else:
+            # if the is no item in the variable result
+            print("To-do item with such ID not found...\n")
+            go_back = input("Enter 'b' to go back to update list item menu,\n"
+                            "'m' to go to main menu or enter key to quit: ").strip().lower()
+            if go_back == 'b':
+                update_a_list_item()
+            elif go_back == 'm':
+                menu()
+    except sqlite3.Error as err:
+        print()
+        print("SQLite error:", err)
+    finally:
+        if conn is not None:
+            conn.close()
+            go_to_menu = input("Hit enter key to quit application or 'm' to go to main menu: ").strip().lower()
+            if go_to_menu == "m":
+                menu()
+
+
+def update_due_date(id_chosen):
+    # first of all, check if there is such ID in the table in the database
+    conn = None
+    try:
+        conn = sqlite3.connect(db_path)
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM `To-do_list` WHERE `To-do_ID` = ?", (id_chosen,))
+
+        # save the result in a variable
+        result = cur.fetchall()
+
+        # check if there is something in result
+        if len(result) > 0:
+            # then we can change the date
+            print("New you can change the date...")
+            new_date = get_due_date()
+            cur.execute("""UPDATE `To-do_list`
+                           SET DueDate = ?
+                           WHERE `To-do_ID` == ?""",
+                        (new_date, id_chosen))
+            conn.commit()
+
+            # this can cause the status to be moved from overdue to pending,
+            # so lets call the update_status function
+            update_status()
+
+            print(f"\nTo-do item with ID {id_chosen} have successfully been changed...\n")
         else:
             # if the is no item in the variable result
             print("To-do item with such ID not found...\n")
