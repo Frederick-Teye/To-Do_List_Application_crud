@@ -189,7 +189,7 @@ def item_status_number(status):
 
 
 def add_new_item():
-    description = input("Enter a short description for this to-do item: ")
+    description = get_description()
     due_date = get_due_date()  # this function gets t date from the user and return value
 
     days_left = days_lft(due_date)  # this function returns the number of days left
@@ -722,7 +722,7 @@ def update_description(id_chosen):
         # check if there is something in result
         if len(result) > 0:
             # then we can change the description
-            new_description = input("Enter new description: ").strip()
+            new_description = get_description()
             cur.execute("""UPDATE `To-do_list`
                            SET Description = ?
                            WHERE `To-do_ID` == ?""",
@@ -846,4 +846,116 @@ def update_priority(id_chosen):
                 menu()
 
 
-main()
+def delete_item():
+    user_choice = input("\n1. Delete an item\n"
+                        "2. Delete all items\n"
+                        "Enter your choice: ").strip()
+    if user_choice == "1":
+        delete_an_item()
+    elif user_choice == "2":
+        delete_all_items()
+    else:
+        want_to_quit = input("Hit enter key to quit or m to go to main menu: ").strip().lower()
+        if want_to_quit == "m":
+            menu()
+
+
+def delete_an_item():
+    print("To delete an item, you have to search for it,\n"
+          "Select it ID number and confirm to delete it")
+
+    view_an_item()  # to view an item to delete
+    print()
+    id_chosen = input("Enter ID No. of the item you want to change it delete: ").strip()
+    while True:
+        if id_chosen.isnumeric():
+            break
+        else:
+            print("You have to enter a number...")
+            id_chosen = input("Enter ID No. of the item you want to change it description: ").strip()
+
+    # first of all, check if there is such ID in the table in the database
+    conn = None
+    try:
+        conn = sqlite3.connect(db_path)
+        cur = conn.cursor()
+        id_chosen_int = int(id_chosen)
+        cur.execute("SELECT * FROM `To-do_list` WHERE `To-do_ID` = ?", (id_chosen_int,))
+
+        # save the result in a variable
+        result = cur.fetchall()
+
+        # check if there is something in result
+        if len(result) > 0:
+            # then we can change the description
+            delete_decision = input("Are you sure you want to delete the item? (y/n): ").strip().lower()
+            if delete_decision == "y":
+                cur.execute("""DELETE FROM `To-do_list`
+                               WHERE `To-do_ID` == ?""",
+                            (id_chosen_int,))
+                conn.commit()
+                print(f"\nTo-do item with ID {id_chosen} have successfully been deleted...\n")
+        else:
+            # if the is no item in the variable result
+            print("To-do item with such ID not found...\n")
+            go_back = input("Enter 'b' to go back to update list item menu,\n"
+                            "'m' to go to main menu or enter key to quit: ").strip().lower()
+            if go_back == 'b':
+                update_a_list_item()
+            elif go_back == 'm':
+                menu()
+    except sqlite3.Error as err:
+        print()
+        print("SQLite error:", err)
+    finally:
+        if conn is not None:
+            conn.close()
+            go_to_menu = input("Hit enter key to quit application or 'm' to go to main menu: ").strip().lower()
+            if go_to_menu == "m":
+                menu()
+
+
+def delete_all_items():
+    are_you_sure = input("Are you sure you want to delete all items in To-do_list? (y/n): ").strip().lower()
+    if are_you_sure == 'y':
+        conn = None
+        try:
+            conn = sqlite3.connect(db_path)
+            cur = conn.cursor()
+            cur.execute("DELETE FROM `To-do_list`")
+            are_you_sure = input("Are you sure you want to delete all items in To-do_list? (y/n): ").strip().lower()
+            if are_you_sure == 'y':
+                conn.commit()
+                print("All items in To do list have successfully been deleted...")
+        except sqlite3.Error as err:
+            print()
+            print("SQLite error:", err)
+        finally:
+            if conn is not None:
+                conn.close()
+                go_to_menu = input("Hit enter key to quit application or 'm' to go to main menu: ").strip().lower()
+                if go_to_menu == "m":
+                    menu()
+
+
+def exit_application():
+    print("\nThanks for running this code... \nGoodbye...")
+
+
+def get_description():
+    while True:
+        print("You can only enter 25 characters for a description...\n")
+        description = input("Enter your description here: ").strip()
+
+        if len(description) > 25:
+            new_description = description[:24] + "..."
+            print(f"The description you entered is too long and has been modified to:\n{new_description}")
+            is_okay = input("\nAre you okay with the modified description? (y/n): ").strip().lower()
+            if is_okay == "y":
+                return new_description
+        else:
+            return description
+
+
+if __name__ == "__main__":
+    main()
