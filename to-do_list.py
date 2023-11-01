@@ -375,7 +375,10 @@ def view_by_desc():
 
             # call the menu function, the user might need it
             print()
-            menu()
+            will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+            if will_you == "m":
+                print()
+                menu()
     elif user_choice == "2":
         input_start_str = input("Enter the characters that is in the middle of the description: ").strip().lower()
         start_str = f"%{input_start_str}%"
@@ -405,7 +408,10 @@ def view_by_desc():
 
             # call the menu function, the user might need it
             print()
-            menu()
+            will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+            if will_you == "m":
+                print()
+                menu()
     elif user_choice == "3":
         input_start_str = input("Enter the characters that end of the description: ").strip().lower()
         start_str = f"%{input_start_str}"
@@ -434,7 +440,10 @@ def view_by_desc():
 
             # call the menu function, the user might need it
             print()
-            menu()
+            will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+            if will_you == "m":
+                print()
+                menu()
     elif user_choice == "4":
         input_start_str = input("Enter the characters that are somewhere in the "
                                 "description/make up the description: ").strip().lower()
@@ -465,7 +474,10 @@ def view_by_desc():
 
             # call the menu function, the user might need it
             print()
-            menu()
+            will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+            if will_you == "m":
+                print()
+                menu()
     else:
         print("Invalid input... Enter 1, 2, 3 or 4...")
         view_by_desc()
@@ -504,7 +516,10 @@ def view_by_priority():
 
             # call the menu function, the user might need it
             print()
-            menu()
+            will_you = input("Hit enter key continue or 'm' to go to main menu: ").strip().lower()
+            if will_you == "m":
+                print()
+                menu()
     if user_choice == "2":
         conn = None
         try:
@@ -531,7 +546,10 @@ def view_by_priority():
 
             # call the menu function, the user might need it
             print()
-            menu()
+            will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+            if will_you == "m":
+                print()
+                menu()
     if user_choice == "2":
         conn = None
         try:
@@ -558,7 +576,10 @@ def view_by_priority():
 
             # call the menu function, the user might need it
             print()
-            menu()
+            will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+            if will_you == "m":
+                print()
+                menu()
 
 
 def view_by_status():
@@ -592,7 +613,10 @@ def view_by_status():
 
             # call the menu function, the user might need it
             print()
-            menu()
+            will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+            if will_you == "m":
+                print()
+                menu()
     elif user_choice == "2":
         conn = None
         try:
@@ -619,7 +643,10 @@ def view_by_status():
 
             # call the menu function, the user might need it
             print()
-            menu()
+            will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+            if will_you == "m":
+                print()
+                menu()
     elif user_choice == "3":
         conn = None
         try:
@@ -646,14 +673,41 @@ def view_by_status():
 
             # call the menu function, the user might need it
             print()
-            menu()
+            will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+            if will_you == "m":
+                print()
+                menu()
     else:
         print("Invalid input... Enter only 1, 2 or 3")
         view_by_status()
 
 
 def update_a_list_item():
-    pass
+    user_choice = input("\n1. Update a description\n"
+                        "2. Update due date\n"
+                        "3. Update priority\n"
+                        "Enter your choice here: ").strip()
+
+    if user_choice == "1":
+        print("To update a description, you need to search for the item\n"
+              "Select the item ID and then Go ahead and update it description\n")
+        view_an_item()
+        print()
+        id_chose = input("Enter ID No. of the item you want to change it description: ").strip()
+        while True:
+            if id_chose.isnumeric():
+                break
+            else:
+                print("You have to enter a number...")
+                id_chose = input("Enter ID No. of the item you want to change it description: ").strip()
+        change_description(id_chose)
+    elif user_choice == "2":
+        pass
+    elif user_choice == "3":
+        pass
+    else:
+        print("Invalid input... Enter 1, 2 or 3")
+        update_a_list_item()
 
 
 main()
