@@ -678,7 +678,7 @@ def update_a_list_item():
         update_description(int(id_chosen))
     elif user_choice == "2":
         print("To update a due date, you need to search for the item,\n"
-              "Select the item ID and then Go ahead and update it description")
+              "Select the item ID and then Go ahead and update it due date")
         view_an_item()
         print()
         id_chosen = input("Enter ID No. of the item you want to change it date: ").strip()
@@ -690,7 +690,18 @@ def update_a_list_item():
                 id_chosen = input("Enter ID No. of the item you want to change it date: ").strip()
         update_due_date(int(id_chosen))
     elif user_choice == "3":
-        pass
+        print("To update a priority, you need to search for the item,\n"
+              "Select the item ID and then Go ahead and update it priority")
+        view_an_item()
+        print()
+        id_chosen = input("Enter ID No. of the item you want to change it priority: ").strip()
+        while True:
+            if id_chosen.isnumeric():
+                break
+            else:
+                print("You have to enter a number...")
+                id_chosen = input("Enter ID No. of the item you want to change it priority: ").strip()
+        update_priority(int(id_chosen))
     else:
         print("Invalid input... Enter 1, 2 or 3")
         update_a_list_item()
