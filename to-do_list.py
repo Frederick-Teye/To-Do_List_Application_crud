@@ -344,7 +344,7 @@ def view_by_desc():
                         "1. Start the description\n"
                         "2. Are in the middle of the description\n"
                         "3. End the description\n"
-                        "4. That are somewhere in the description / or make up the description\n"
+                        "4. Are somewhere in the description/make up the description\n"
                         "Enter your choice: ").strip()
     if user_choice == "1":
         input_start_str = input("Enter the characters that starts the description: ").strip().lower()
@@ -689,18 +689,18 @@ def update_a_list_item():
                         "Enter your choice here: ").strip()
 
     if user_choice == "1":
-        print("To update a description, you need to search for the item\n"
-              "Select the item ID and then Go ahead and update it description\n")
+        print("To update a description, you need to search for the item,\n"
+              "Select the item ID and then Go ahead and update it description")
         view_an_item()
         print()
-        id_chose = input("Enter ID No. of the item you want to change it description: ").strip()
+        id_chosen = input("Enter ID No. of the item you want to change it description: ").strip()
         while True:
-            if id_chose.isnumeric():
+            if id_chosen.isnumeric():
                 break
             else:
                 print("You have to enter a number...")
-                id_chose = input("Enter ID No. of the item you want to change it description: ").strip()
-        change_description(id_chose)
+                id_chosen = input("Enter ID No. of the item you want to change it description: ").strip()
+        update_description(int(id_chosen))
     elif user_choice == "2":
         pass
     elif user_choice == "3":
@@ -708,6 +708,49 @@ def update_a_list_item():
     else:
         print("Invalid input... Enter 1, 2 or 3")
         update_a_list_item()
+
+
+def update_description(id_chosen):
+    # first of all, check if there is such ID in the table in the database
+    conn = None
+    try:
+        conn = sqlite3.connect(db_path)
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM `To-do_list` WHERE `To-do_ID` = ?", (id_chosen,))
+
+        # save the result in a variable
+        result = cur.fetchall()
+
+        # check if there is something in result
+        if len(result) > 0:
+            # then we can change the description
+            new_description = input("Enter new description: ").strip()
+            cur.execute("""UPDATE `To-do_list`
+                           SET Description = ?
+                           WHERE `To-do_ID` == ?""",
+                        (new_description, id_chosen))
+            conn.commit()
+            print(f"To-do item with ID {id_chosen} have successfully been changed...\n")
+        else:
+            # if the is no item in the variable result
+            print("To-do item with such ID not found...")
+            go_back = input("Enter 'b' to go back to update list item menu,\n"
+                            "'m' to go to main menu or enter key to quit: ").strip().lower()
+            if go_back == 'b':
+                update_a_list_item()
+            elif go_back == 'm':
+                menu()
+    except sqlite3.Error as err:
+        print()
+        print("SQLite error:", err)
+    finally:
+        if conn is not None:
+            conn.close()
+            go_to_menu = input("Hit enter key to quit application or 'm' to go to main menu: ").strip().lower()
+            if go_to_menu == "m":
+                menu()
+
+
 
 
 main()
