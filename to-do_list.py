@@ -360,10 +360,10 @@ def view_by_desc():
             # check if there is any data in results before printing them
             if len(result) > 0:
                 print()
-                print("        Description            Due Date      Days Left/Overdue   Priority     Status\n"
-                      "------------------------------------------------------------------------------------")
+                print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
+                      "------------------------------------------------------------------------------------------")
                 for row in result:
-                    print(f"{row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
+                    print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
             else:
                 print("There is no description that has such characters as it beginning characters")
         except sqlite3.Error as err:
@@ -389,10 +389,11 @@ def view_by_desc():
 
             # check if there is any data in results before printing them
             if len(result) > 0:
-                print("        Description            Due Date      Days Left/Overdue   Priority     Status\n"
-                      "------------------------------------------------------------------------------------")
+                print()
+                print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
+                      "------------------------------------------------------------------------------------------")
                 for row in result:
-                    print(f"{row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
+                    print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
             else:
                 print("There is no description that has those characters in it's middle")
         except sqlite3.Error as err:
@@ -417,11 +418,11 @@ def view_by_desc():
             result = cur.fetchall()
 
             # check if there is any data in results before printing them
-            if len(result) > 0:
-                print("        Description            Due Date      Days Left/Overdue   Priority     Status\n"
-                      "------------------------------------------------------------------------------------")
-                for row in result:
-                    print(f"{row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
+            print()
+            print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
+                  "------------------------------------------------------------------------------------------")
+            for row in result:
+                print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
             else:
                 print("There is no description that has those characters at the end")
         except sqlite3.Error as err:
@@ -448,10 +449,11 @@ def view_by_desc():
 
             # check if there is any data in results before printing them
             if len(result) > 0:
-                print("        Description            Due Date      Days Left/Overdue   Priority     Status\n"
-                      "------------------------------------------------------------------------------------")
+                print()
+                print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
+                      "------------------------------------------------------------------------------------------")
                 for row in result:
-                    print(f"{row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
+                    print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
             else:
                 print("There is no description those characters in it...")
         except sqlite3.Error as err:
@@ -487,10 +489,10 @@ def view_by_priority():
             # check if there is any data in results before printing them
             if len(result) > 0:
                 print()
-                print("        Description            Due Date      Days Left/Overdue   Priority     Status\n"
-                      "------------------------------------------------------------------------------------")
+                print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
+                      "------------------------------------------------------------------------------------------")
                 for row in result:
-                    print(f"{row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
+                    print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
             else:
                 print("There to-do item that has a Critical/High priority...")
         except sqlite3.Error as err:
@@ -514,10 +516,10 @@ def view_by_priority():
             # check if there is any data in results before printing them
             if len(result) > 0:
                 print()
-                print("        Description            Due Date      Days Left/Overdue   Priority     Status\n"
-                      "------------------------------------------------------------------------------------")
+                print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
+                      "------------------------------------------------------------------------------------------")
                 for row in result:
-                    print(f"{row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
+                    print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
             else:
                 print("There to-do item that has a Normal/Medium priority...")
         except sqlite3.Error as err:
@@ -541,10 +543,10 @@ def view_by_priority():
             # check if there is any data in results before printing them
             if len(result) > 0:
                 print()
-                print("        Description            Due Date      Days Left/Overdue   Priority     Status\n"
-                      "------------------------------------------------------------------------------------")
+                print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
+                      "------------------------------------------------------------------------------------------")
                 for row in result:
-                    print(f"{row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
+                    print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
             else:
                 print("There to-do item that has a Optional/Low priority...")
         except sqlite3.Error as err:
@@ -575,10 +577,10 @@ def view_by_status():
             # check if there is any data in results before printing them
             if len(result) > 0:
                 print()
-                print("        Description            Due Date      Days Left/Overdue   Priority     Status\n"
-                      "------------------------------------------------------------------------------------")
+                print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
+                      "------------------------------------------------------------------------------------------")
                 for row in result:
-                    print(f"{row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
+                    print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
             else:
                 print("There to-do item that has a pending status...")
         except sqlite3.Error as err:
@@ -602,10 +604,10 @@ def view_by_status():
             # check if there is any data in results before printing them
             if len(result) > 0:
                 print()
-                print("        Description            Due Date      Days Left/Overdue   Priority     Status\n"
-                      "------------------------------------------------------------------------------------")
+                print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
+                      "------------------------------------------------------------------------------------------")
                 for row in result:
-                    print(f"{row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
+                    print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
             else:
                 print("There to-do item that has a status 'In progress'...")
         except sqlite3.Error as err:
@@ -629,10 +631,10 @@ def view_by_status():
             # check if there is any data in results before printing them
             if len(result) > 0:
                 print()
-                print("        Description            Due Date      Days Left/Overdue   Priority     Status\n"
-                      "------------------------------------------------------------------------------------")
+                print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
+                      "------------------------------------------------------------------------------------------")
                 for row in result:
-                    print(f"{row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
+                    print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
             else:
                 print("There to-do item that has a status 'Overdue'...")
         except sqlite3.Error as err:
@@ -648,6 +650,10 @@ def view_by_status():
     else:
         print("Invalid input... Enter only 1, 2 or 3")
         view_by_status()
+
+
+def update_a_list_item():
+    pass
 
 
 main()
