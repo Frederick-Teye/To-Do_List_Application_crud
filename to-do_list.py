@@ -524,10 +524,16 @@ def view_by_priority():
 
                     # call the menu function, the user might need it
                     print()
-                    will_you = input("Hit enter key continue or 'm' to go to main menu: ").strip().lower()
-                    if will_you == "m":
-                        print()
-                        menu()
+                    while True:
+                        will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+                        if will_you == "m":
+                            print()
+                            menu()
+                            break
+                        elif will_you == "":
+                            break
+                        else:
+                            print("Invalid input... \n")
                 break
             if user_choice == "2":
                 conn = None
@@ -555,10 +561,16 @@ def view_by_priority():
 
                     # call the menu function, the user might need it
                     print()
-                    will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
-                    if will_you == "m":
-                        print()
-                        menu()
+                    while True:
+                        will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+                        if will_you == "m":
+                            print()
+                            menu()
+                            break
+                        elif will_you == "":
+                            break
+                        else:
+                            print("Invalid input... \n")
                 break
             if user_choice == "3":
                 conn = None
@@ -586,10 +598,16 @@ def view_by_priority():
 
                     # call the menu function, the user might need it
                     print()
-                    will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
-                    if will_you == "m":
-                        print()
-                        menu()
+                    while True:
+                        will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+                        if will_you == "m":
+                            print()
+                            menu()
+                            break
+                        elif will_you == "":
+                            break
+                        else:
+                            print("Invalid input... \n")
                 break
         else:
             print("Invalid input... Enter 1, 2, or 3")
