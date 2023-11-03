@@ -1,3 +1,4 @@
+import calendar
 import sqlite3
 import os
 from datetime import date
@@ -241,26 +242,34 @@ def add_new_item():
 
 
 def get_due_date():
-    print("\nAt this point, you will be asked to enter day, month, then year...")
+    print("\nAt this point, you will be asked to enter month, year, then day...")
 
-    # get day
-    day = input("\nEnter day: ").strip()
-    while True:
-        if day.isnumeric() and int(day) in range(1, 32):
-            break
-        else:
-            print("\nYou can only enter numbers between 1 and 31")
-            day = input("Enter day: ").strip()
-
-    month = get_month()
-
+    month = get_month()  # Assume the code for retrieving the month is already defined
     while True:
         year = input("Enter year: ")
         if len(year) == 4 and year.isnumeric() and int(year) >= date.today().year:
-            return f"{year}-{month}-{day.zfill(2)}"
-            # .zfill(2) is to pad the day with a zero if it is only a single digit
+            last_day = last_day_of_month(int(year), month)
+            if last_day:
+                day = input(f"Enter day (between 1 and {last_day}): ").strip()
+                while not (day.isnumeric() and 1 <= int(day) <= last_day):
+                    print(f"\nYou can only enter numbers between 1 and {last_day}")
+                    day = input(f"Enter day (between 1 and {last_day}): ").strip()
+                return f"{year}-{month}-{str(day).zfill(2)}"
         else:
             print(f"You can't enter a year below {date.today().year} or non-numeric characters\n")
+
+
+def last_day_of_month(year, month):
+    if month[0] == '0':
+        month = int(month[1])
+    else:
+        month = int(month)
+
+    if 1 <= month <= 12 and year > 0:
+        last_day = calendar.monthrange(year, month)[1]
+        return last_day
+    else:
+        return None
 
 
 def get_month():
