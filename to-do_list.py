@@ -335,114 +335,118 @@ def view_an_item():
 
 
 def view_by_desc():
-    user_choice = input("\nSearch by entering characters that...\n"
-                        "1. Start the description\n"
-                        "2. End the description\n"
-                        "3. Are somewhere in the description/make up the description\n"
-                        "Enter your choice: ").strip()
-    if user_choice == "1":
-        input_start_str = input("Enter the characters that starts the description: ").strip().lower()
-        start_str = input_start_str + "%"
-        conn = None
-        try:
-            conn = sqlite3.connect(db_path)
-            cur = conn.cursor()
-            cur.execute("""SELECT * FROM "To-do_list" WHERE lower(Description) LIKE ?""",
-                        (start_str,))
-            result = cur.fetchall()
+    while True:
+        user_choice = input("\nSearch by entering characters that...\n"
+                            "1. Start the description\n"
+                            "2. End the description\n"
+                            "3. Are somewhere in the description/make up the description\n"
+                            "Enter your choice: ").strip()
+        if user_choice in ['1', '2', '3']:
+            if user_choice == "1":
+                input_start_str = input("Enter the characters that starts the description: ").strip().lower()
+                start_str = input_start_str + "%"
+                conn = None
+                try:
+                    conn = sqlite3.connect(db_path)
+                    cur = conn.cursor()
+                    cur.execute("""SELECT * FROM "To-do_list" WHERE lower(Description) LIKE ?""",
+                                (start_str,))
+                    result = cur.fetchall()
 
-            # check if there is any data in results before printing them
-            if len(result) > 0:
-                print()
-                print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
-                      "------------------------------------------------------------------------------------------")
-                for row in result:
-                    print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
-            else:
-                print("There is no description that has such characters as it beginning characters")
-        except sqlite3.Error as err:
-            print(err)
-        finally:
-            # close connection
-            if conn is not None:
-                conn.close()
+                    # check if there is any data in results before printing them
+                    if len(result) > 0:
+                        print()
+                        print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
+                              "------------------------------------------------------------------------------------------")
+                        for row in result:
+                            print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
+                    else:
+                        print("There is no description that has such characters as it beginning characters")
+                except sqlite3.Error as err:
+                    print(err)
+                finally:
+                    # close connection
+                    if conn is not None:
+                        conn.close()
 
-            # call the menu function, the user might need it
-            print()
-            will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
-            if will_you == "m":
-                print()
-                menu()
+                    # call the menu function, the user might need it
+                    print()
+                    will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+                    if will_you == "m":
+                        print()
+                        menu()
+                break
 
-    elif user_choice == "2":
-        input_end_str = input("Enter the characters that end of the description: ").strip().lower()
-        end_str = f"%{input_end_str}"
-        conn = None
-        try:
-            conn = sqlite3.connect(db_path)
-            cur = conn.cursor()
-            cur.execute("""SELECT * FROM "To-do_list" WHERE lower(Description) LIKE ?""",
-                        (end_str,))
-            result = cur.fetchall()
+            elif user_choice == "2":
+                input_end_str = input("Enter the characters that end of the description: ").strip().lower()
+                end_str = f"%{input_end_str}"
+                conn = None
+                try:
+                    conn = sqlite3.connect(db_path)
+                    cur = conn.cursor()
+                    cur.execute("""SELECT * FROM "To-do_list" WHERE lower(Description) LIKE ?""",
+                                (end_str,))
+                    result = cur.fetchall()
 
-            # check if there is any data in results before printing them
-            print()
-            print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
-                  "------------------------------------------------------------------------------------------")
-            for row in result:
-                print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
-            else:
-                print("There is no description that has those characters at the end")
-        except sqlite3.Error as err:
-            print(err)
-        finally:
-            # close connection
-            if conn is not None:
-                conn.close()
+                    # check if there is any data in results before printing them
+                    print()
+                    print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
+                          "------------------------------------------------------------------------------------------")
+                    for row in result:
+                        print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
+                    else:
+                        print("There is no description that has those characters at the end")
+                except sqlite3.Error as err:
+                    print(err)
+                finally:
+                    # close connection
+                    if conn is not None:
+                        conn.close()
 
-            # call the menu function, the user might need it
-            print()
-            will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
-            if will_you == "m":
-                print()
-                menu()
-    elif user_choice == "3":
-        input_a_str = input("Enter the characters that are somewhere in the "
-                            "description/make up the description: ").strip().lower()
-        a_str = f"%{input_a_str}%"
-        conn = None
-        try:
-            conn = sqlite3.connect(db_path)
-            cur = conn.cursor()
-            cur.execute("""SELECT * FROM "To-do_list" WHERE lower(Description) LIKE ?""",
-                        (a_str,))
-            result = cur.fetchall()
+                    # call the menu function, the user might need it
+                    print()
+                    will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+                    if will_you == "m":
+                        print()
+                        menu()
+                break
+            elif user_choice == "3":
+                input_a_str = input("Enter the characters that are somewhere in the "
+                                    "description/make up the description: ").strip().lower()
+                a_str = f"%{input_a_str}%"
+                conn = None
+                try:
+                    conn = sqlite3.connect(db_path)
+                    cur = conn.cursor()
+                    cur.execute("""SELECT * FROM "To-do_list" WHERE lower(Description) LIKE ?""",
+                                (a_str,))
+                    result = cur.fetchall()
 
-            # check if there is any data in results before printing them
-            if len(result) > 0:
-                print()
-                print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
-                      "------------------------------------------------------------------------------------------")
-                for row in result:
-                    print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
-            else:
-                print("There is no description those characters in it...")
-        except sqlite3.Error as err:
-            print(err)
-        finally:
-            # close connection
-            if conn is not None:
-                conn.close()
+                    # check if there is any data in results before printing them
+                    if len(result) > 0:
+                        print()
+                        print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
+                              "------------------------------------------------------------------------------------------")
+                        for row in result:
+                            print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
+                    else:
+                        print("There is no description those characters in it...")
+                except sqlite3.Error as err:
+                    print(err)
+                finally:
+                    # close connection
+                    if conn is not None:
+                        conn.close()
 
-            # call the menu function, the user might need it
-            print()
-            will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
-            if will_you == "m":
-                print()
-                menu()
-    else:
-        print("Invalid input... Enter 1, 2, 3 or 4...")
-        view_by_desc()
+                    # call the menu function, the user might need it
+                    print()
+                    will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+                    if will_you == "m":
+                        print()
+                        menu()
+                break
+        else:
+            print("Invalid input... Enter 1, 2, 3 or 4...")
 
 
 def view_by_priority():
