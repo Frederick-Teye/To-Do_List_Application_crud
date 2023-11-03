@@ -321,19 +321,17 @@ def view_items():
 
 
 def view_an_item():
-    user_choice = input("\n1. Search by inputting the description\n"
-                        "2. Search list item(s) with a specific priority\n"
-                        "3. Search list item(s) with a specific status\n"
-                        "Enter your choice: ").strip()
-    if user_choice == "1":
-        view_by_desc()
-    elif user_choice == "2":
-        view_by_priority()
-    elif user_choice == "3":
-        view_by_status()
-    else:
-        print("Wrong input... Enter 1, 2, or 3")
-        view_an_item()
+    while True:
+        user_choice = input("\n1. Search by inputting the description\n"
+                            "2. Search list item(s) with a specific priority\n"
+                            "3. Search list item(s) with a specific status\n"
+                            "Enter your choice: ").strip()
+        choices = {"1": view_by_desc, "2": view_by_priority, "3": view_by_status}
+        if user_choice in choices:
+            choices[user_choice]()  # Call the function based on user input
+            break
+        else:
+            print("Wrong input... Enter 1, 2, or 3")
 
 
 def view_by_desc():
