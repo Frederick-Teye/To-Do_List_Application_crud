@@ -778,67 +778,71 @@ def view_by_status():
 
 
 def update_a_list_item():
-    user_choice = input("\n1. Update a description\n"
-                        "2. Update due date\n"
-                        "3. Update priority\n"
-                        "4. Mark status completed\n"
-                        "Enter your choice here: ").strip()
-
-    if user_choice == "1":
-        print("To update a description, you need to search for the item,\n"
-              "Select the item ID and then Go ahead and update it description")
-        view_an_item()
-        print()
-        id_chosen = input("Enter ID No. of the item you want to change it description: ").strip()
-        while True:
-            if id_chosen.isnumeric():
-                break
-            else:
-                print("You have to enter a number...")
+    while True:
+        user_choice = input("\n1. Update a description\n"
+                            "2. Update due date\n"
+                            "3. Update priority\n"
+                            "4. Mark status completed\n"
+                            "Enter your choice here: ").strip()
+        if user_choice in ['1', '2', '3', '4']:
+            if user_choice == "1":
+                print("To update a description, you need to search for the item,\n"
+                      "Select the item ID and then Go ahead and update it description")
+                view_an_item()
+                print()
                 id_chosen = input("Enter ID No. of the item you want to change it description: ").strip()
-        update_description(int(id_chosen))
-    elif user_choice == "2":
-        print("To update a due date, you need to search for the item,\n"
-              "Select the item ID and then Go ahead and update it due date")
-        view_an_item()
-        print()
-        id_chosen = input("Enter ID No. of the item you want to change it date: ").strip()
-        while True:
-            if id_chosen.isnumeric():
+                while True:
+                    if id_chosen.isnumeric():
+                        break
+                    else:
+                        print("You have to enter a number...")
+                        id_chosen = input("Enter ID No. of the item you want to change it description: ").strip()
+                update_description(int(id_chosen))
                 break
-            else:
-                print("You have to enter a number...")
+            elif user_choice == "2":
+                print("To update a due date, you need to search for the item,\n"
+                      "Select the item ID and then Go ahead and update it due date")
+                view_an_item()
+                print()
                 id_chosen = input("Enter ID No. of the item you want to change it date: ").strip()
-        update_due_date(int(id_chosen))
-    elif user_choice == "3":
-        print("To update a priority, you need to search for the item,\n"
-              "Select the item ID and then Go ahead and update it priority")
-        view_an_item()
-        print()
-        id_chosen = input("Enter ID No. of the item you want to change it priority: ").strip()
-        while True:
-            if id_chosen.isnumeric():
+                while True:
+                    if id_chosen.isnumeric():
+                        break
+                    else:
+                        print("You have to enter a number...")
+                        id_chosen = input("Enter ID No. of the item you want to change it date: ").strip()
+                update_due_date(int(id_chosen))
                 break
-            else:
-                print("You have to enter a number...")
+            elif user_choice == "3":
+                print("To update a priority, you need to search for the item,\n"
+                      "Select the item ID and then Go ahead and update it priority")
+                view_an_item()
+                print()
                 id_chosen = input("Enter ID No. of the item you want to change it priority: ").strip()
-        update_priority(int(id_chosen))
-    elif user_choice == "4":
-        print("To update a status, you need to search for the item,\n"
-              "Select the item ID and then Go ahead and update it status")
-        view_an_item()
-        print()
-        id_chosen = input("Enter ID No. of an item, for it status to be marked completed: ").strip()
-        while True:
-            if id_chosen.isnumeric():
+                while True:
+                    if id_chosen.isnumeric():
+                        break
+                    else:
+                        print("You have to enter a number...")
+                        id_chosen = input("Enter ID No. of the item you want to change it priority: ").strip()
+                update_priority(int(id_chosen))
                 break
-            else:
-                print("You have to enter a number...")
-                id_chosen = input("Enter ID No. of the item you want to change it priority: ").strip()
-        mark_status_complete(int(id_chosen))
-    else:
-        print("Invalid input... Enter 1, 2 or 3")
-        update_a_list_item()
+            elif user_choice == "4":
+                print("To update a status, you need to search for the item,\n"
+                      "Select the item ID and then Go ahead and update it status")
+                view_an_item()
+                print()
+                id_chosen = input("Enter ID No. of an item, for it status to be marked completed: ").strip()
+                while True:
+                    if id_chosen.isnumeric():
+                        break
+                    else:
+                        print("You have to enter a number...")
+                        id_chosen = input("Enter ID No. of the item you want to change it priority: ").strip()
+                mark_status_complete(int(id_chosen))
+                break
+        else:
+            print("Invalid input... Enter 1, 2 or 3")
 
 
 def update_description(id_chosen):
@@ -896,7 +900,7 @@ def update_due_date(id_chosen):
         # check if there is something in result
         if len(result) > 0:
             # then we can change the date
-            print("New you can change the date...")
+            print("Now you can change the date...")
             new_date = get_due_date()
             cur.execute("""UPDATE `To-do_list`
                            SET DueDate = ?
@@ -1061,10 +1065,10 @@ def delete_an_item():
         else:
             # if the is no item in the variable result
             print("To-do item with such ID not found...\n")
-            go_back = input("Enter 'b' to go back to update list item menu,\n"
+            go_back = input("Enter 'b' to go back to delete list item menu,\n"
                             "'m' to go to main menu or enter key to quit: ").strip().lower()
             if go_back == 'b':
-                update_a_list_item()
+                delete_item()
             elif go_back == 'm':
                 menu()
     except sqlite3.Error as err:
@@ -1073,9 +1077,16 @@ def delete_an_item():
     finally:
         if conn is not None:
             conn.close()
-            go_to_menu = input("Hit enter key to quit application or 'm' to go to main menu: ").strip().lower()
-            if go_to_menu == "m":
-                menu()
+            while True:
+                will_you = input("Hit enter key to quit application or 'm' to go to main menu: ").strip().lower()
+                if will_you == "m":
+                    print()
+                    menu()
+                    break
+                elif will_you == "":
+                    break
+                else:
+                    print("Invalid input... \n")
 
 
 def delete_all_items():
@@ -1096,9 +1107,16 @@ def delete_all_items():
         finally:
             if conn is not None:
                 conn.close()
-                go_to_menu = input("Hit enter key to quit application or 'm' to go to main menu: ").strip().lower()
-                if go_to_menu == "m":
-                    menu()
+                while True:
+                    will_you = input("Hit enter key to quit application or 'm' to go to main menu: ").strip().lower()
+                    if will_you == "m":
+                        print()
+                        menu()
+                        break
+                    elif will_you == "":
+                        break
+                    else:
+                        print("Invalid input... \n")
 
 
 def exit_application():
