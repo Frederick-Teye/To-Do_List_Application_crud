@@ -824,6 +824,36 @@ def update_due_date(id_chosen):
                         (new_date, id_chosen))
             conn.commit()
 
+            if date.fromisoformat(new_date) >= date.today() and result[0][6] == 'Completed':
+                print(f"Status of item no. {result[0][0]} was set to 'Completed'")
+                while True:
+                    if date.fromisoformat(new_date) == date.today():
+                        turn_to_in_progress = input('Will you like to turn it to "In Progress"? (y/n): ').strip()
+                        if turn_to_in_progress == 'y':
+                            cur.execute("""UPDATE `To-do_list`
+                                                SET Status = 'In Progress'
+                                                WHERE `To-do_ID` == ?""",
+                                        (id_chosen,))
+                            conn.commit()
+                            break
+                        elif turn_to_in_progress == "n":
+                            break
+                        else:
+                            print("Invalid input... Enter 'y' or 'n'")
+                    elif date.fromisoformat(new_date) > date.today():
+                        turn_to_pending = input('Will you like to turn it to "Pending"? (y/n): ').strip()
+                        if turn_to_pending == 'y':
+                            cur.execute("""UPDATE `To-do_list`
+                                                SET Status = 'Pending'
+                                                WHERE `To-do_ID` == ?""",
+                                        (id_chosen,))
+                            conn.commit()
+                            break
+                        elif turn_to_pending == "n":
+                            break
+                        else:
+                            print("Invalid input... Enter 'y' or 'n'")
+
             # this can cause the status to be moved from overdue to pending,
             # so lets call the update_status function
             update_status()
