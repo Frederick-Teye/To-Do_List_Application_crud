@@ -119,32 +119,39 @@ def update_status():
 
 
 def menu():
-    print("        To-Do List Menu       \n"
-          "------------------------------")
-    option = input("1. Add new to-do item to list\n"
-                   "2. View all to-do items in list\n"
-                   "3. View a specific to-do item\n"
-                   "4. Edit/Update a to-do item\n"
-                   "5. Delete to-do item(s) in list\n"
-                   "6. Exit application\n"
-                   "Enter your choice: ")
+    while True:
+        print("        To-Do List Menu       \n"
+              "------------------------------")
+        option = input("1. Add new to-do item to list\n"
+                       "2. View all to-do items in list\n"
+                       "3. View a specific to-do item\n"
+                       "4. Edit/Update a to-do item\n"
+                       "5. Delete to-do item(s) in list\n"
+                       "6. Exit application\n"
+                       "Enter your choice: ")
 
-    if option == "1":
-        add_new_item()
-    elif option == "2":
-        view_items()
-    elif option == "3":
-        view_an_item()
-    elif option == "4":
-        update_a_list_item()
-    elif option == "5":
-        delete_item()
-    elif option == "6":
-        exit_application()
-    else:
-        print("\nInvalid input..."
-              "\nPlease enter either 1, 2, 3, 4, 5 or 6")
-        menu()
+        if option in ['1', '2', '3', '4', '5', '6']:
+            if option == "1":
+                add_new_item()
+                break
+            elif option == "2":
+                view_items()
+                break
+            elif option == "3":
+                view_an_item()
+                break
+            elif option == "4":
+                update_a_list_item()
+                break
+            elif option == "5":
+                delete_item()
+                break
+            elif option == "6":
+                exit_application()
+                break
+        else:
+            print("\nInvalid input..."
+                  "\nPlease enter either 1, 2, 3, 4, 5 or 6\n")
 
 
 def item_status(days_left):
@@ -255,11 +262,14 @@ def get_due_date():
                     print(f"\nYou can only enter numbers between 1 and {last_day}")
                     day = input(f"Enter day (between 1 and {last_day}): ").strip()
                 return f"{year}-{month}-{str(day).zfill(2)}"
+                # .zfill(2) method pads the number with 0 if the number is single
         else:
             print(f"You can't enter a year below {date.today().year} or non-numeric characters\n")
 
 
 def last_day_of_month(year, month):
+    # this if statement is to handle numbers padded with 0,
+    # because a number like 01, 05 or 09 cannot be cast into int object
     if month[0] == '0':
         month = int(month[1])
     else:
@@ -380,14 +390,20 @@ def view_by_desc():
 
                     # call the menu function, the user might need it
                     print()
-                    will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
-                    if will_you == "m":
-                        print()
-                        menu()
+                    while True:
+                        will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+                        if will_you == "m":
+                            print()
+                            menu()
+                            break
+                        elif will_you == "":
+                            break
+                        else:
+                            print("Invalid input... \n")
                 break
 
             elif user_choice == "2":
-                input_end_str = input("Enter the characters that end of the description: ").strip().lower()
+                input_end_str = input("Enter the characters that end the description: ").strip().lower()
                 end_str = f"%{input_end_str}"
                 conn = None
                 try:
@@ -398,11 +414,12 @@ def view_by_desc():
                     result = cur.fetchall()
 
                     # check if there is any data in results before printing them
-                    print()
-                    print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
-                          "------------------------------------------------------------------------------------------")
-                    for row in result:
-                        print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
+                    if len(result) > 0:
+                        print()
+                        print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
+                              "------------------------------------------------------------------------------------------")
+                        for row in result:
+                            print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
                     else:
                         print("There is no description that has those characters at the end")
                 except sqlite3.Error as err:
@@ -414,10 +431,16 @@ def view_by_desc():
 
                     # call the menu function, the user might need it
                     print()
-                    will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
-                    if will_you == "m":
-                        print()
-                        menu()
+                    while True:
+                        will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+                        if will_you == "m":
+                            print()
+                            menu()
+                            break
+                        elif will_you == "":
+                            break
+                        else:
+                            print("Invalid input... \n")
                 break
             elif user_choice == "3":
                 input_a_str = input("Enter the characters that are somewhere in the "
@@ -449,10 +472,16 @@ def view_by_desc():
 
                     # call the menu function, the user might need it
                     print()
-                    will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
-                    if will_you == "m":
-                        print()
-                        menu()
+                    while True:
+                        will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+                        if will_you == "m":
+                            print()
+                            menu()
+                            break
+                        elif will_you == "":
+                            break
+                        else:
+                            print("Invalid input... \n")
                 break
         else:
             print("Invalid input... Enter 1, 2, 3 or 4...")
