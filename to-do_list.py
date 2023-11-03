@@ -545,103 +545,143 @@ def view_by_priority():
 
 
 def view_by_status():
-    user_choice = input("\n1. View pending to-do items\n"
-                        "2. View to-do items that are in progress\n"
-                        "3. View to-do items that are overdue\n"
-                        "Enter your choice here: ").strip()
-    if user_choice == "1":
-        conn = None
-        try:
-            conn = sqlite3.connect(db_path)
-            cur = conn.cursor()
-            cur.execute("""SELECT * FROM "To-do_list" WHERE Status == "Pending" """)
-            result = cur.fetchall()
+    while True:
+        user_choice = input("\n1. View pending to-do items\n"
+                            "2. View to-do items that are in progress\n"
+                            "3. View to-do items that are overdue\n"
+                            "4. View to-do items that are completed\n"
+                            "Enter your choice here: ").strip()
 
-            # check if there is any data in results before printing them
-            if len(result) > 0:
-                print()
-                print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
-                      "------------------------------------------------------------------------------------------")
-                for row in result:
-                    print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
-            else:
-                print("There is no To-do item that has a pending status...")
-        except sqlite3.Error as err:
-            print(err)
-        finally:
-            # close connection
-            if conn is not None:
-                conn.close()
+        choices_list = ["1", '2', '3', '4']
 
-            # call the menu function, the user might need it
-            print()
-            will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
-            if will_you == "m":
-                print()
-                menu()
-    elif user_choice == "2":
-        conn = None
-        try:
-            conn = sqlite3.connect(db_path)
-            cur = conn.cursor()
-            cur.execute("""SELECT * FROM "To-do_list" WHERE Status == "In progress" """)
-            result = cur.fetchall()
+        # check if user choice is in the choices list
+        if user_choice in choices_list:
+            if user_choice == "1":
+                conn = None
+                try:
+                    conn = sqlite3.connect(db_path)
+                    cur = conn.cursor()
+                    cur.execute("""SELECT * FROM "To-do_list" WHERE Status == "Pending" """)
+                    result = cur.fetchall()
 
-            # check if there is any data in results before printing them
-            if len(result) > 0:
-                print()
-                print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
-                      "------------------------------------------------------------------------------------------")
-                for row in result:
-                    print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
-            else:
-                print("There is no To-do item that has a status 'In progress'...")
-        except sqlite3.Error as err:
-            print(err)
-        finally:
-            # close connection
-            if conn is not None:
-                conn.close()
+                    # check if there is any data in results before printing them
+                    if len(result) > 0:
+                        print()
+                        print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
+                              "------------------------------------------------------------------------------------------")
+                        for row in result:
+                            print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
+                    else:
+                        print("There is no To-do item that has a pending status...")
+                except sqlite3.Error as err:
+                    print(err)
+                finally:
+                    # close connection
+                    if conn is not None:
+                        conn.close()
 
-            # call the menu function, the user might need it
-            print()
-            will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
-            if will_you == "m":
-                print()
-                menu()
-    elif user_choice == "3":
-        conn = None
-        try:
-            conn = sqlite3.connect(db_path)
-            cur = conn.cursor()
-            cur.execute("""SELECT * FROM "To-do_list" WHERE Status == "Overdue" """)
-            result = cur.fetchall()
+                    # call the menu function, the user might need it
+                    print()
+                    will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+                    if will_you == "m":
+                        print()
+                        menu()
+                break
+            elif user_choice == "2":
+                conn = None
+                try:
+                    conn = sqlite3.connect(db_path)
+                    cur = conn.cursor()
+                    cur.execute("""SELECT * FROM "To-do_list" WHERE Status == "In progress" """)
+                    result = cur.fetchall()
 
-            # check if there is any data in results before printing them
-            if len(result) > 0:
-                print()
-                print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
-                      "------------------------------------------------------------------------------------------")
-                for row in result:
-                    print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
-            else:
-                print("There is no To-do item that has a status 'Overdue'...")
-        except sqlite3.Error as err:
-            print(err)
-        finally:
-            # close connection
-            if conn is not None:
-                conn.close()
+                    # check if there is any data in results before printing them
+                    if len(result) > 0:
+                        print()
+                        print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
+                              "------------------------------------------------------------------------------------------")
+                        for row in result:
+                            print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
+                    else:
+                        print("There is no To-do item that has a status 'In progress'...")
+                except sqlite3.Error as err:
+                    print(err)
+                finally:
+                    # close connection
+                    if conn is not None:
+                        conn.close()
 
-            # call the menu function, the user might need it
-            print()
-            will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
-            if will_you == "m":
-                print()
-                menu()
-    else:
-        print("Invalid input... Enter only 1, 2 or 3")
-        view_by_status()
+                    # call the menu function, the user might need it
+                    print()
+                    will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+                    if will_you == "m":
+                        print()
+                        menu()
+                break
+            elif user_choice == "3":
+                conn = None
+                try:
+                    conn = sqlite3.connect(db_path)
+                    cur = conn.cursor()
+                    cur.execute("""SELECT * FROM "To-do_list" WHERE Status == "Overdue" """)
+                    result = cur.fetchall()
+
+                    # check if there is any data in results before printing them
+                    if len(result) > 0:
+                        print()
+                        print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
+                              "------------------------------------------------------------------------------------------")
+                        for row in result:
+                            print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
+                    else:
+                        print("There is no To-do item that has a status 'Overdue'...")
+                except sqlite3.Error as err:
+                    print(err)
+                finally:
+                    # close connection
+                    if conn is not None:
+                        conn.close()
+
+                    # call the menu function, the user might need it
+                    print()
+                    will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+                    if will_you == "m":
+                        print()
+                        menu()
+                break
+            elif user_choice == "4":
+                conn = None
+                try:
+                    conn = sqlite3.connect(db_path)
+                    cur = conn.cursor()
+                    cur.execute("""SELECT * FROM "To-do_list" WHERE Status == "Completed" """)
+                    result = cur.fetchall()
+
+                    # check if there is any data in results before printing them
+                    if len(result) > 0:
+                        print()
+                        print("ID No.      Description             Due Date      Days Left/Overdue    Priority     Status\n"
+                              "------------------------------------------------------------------------------------------")
+                        for row in result:
+                            print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
+                    else:
+                        print("There is no To-do item that has a status 'Completed'...")
+                except sqlite3.Error as err:
+                    print(err)
+                finally:
+                    # close connection
+                    if conn is not None:
+                        conn.close()
+
+                    # call the menu function, the user might need it
+                    print()
+                    will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+                    if will_you == "m":
+                        print()
+                        menu()
+                break
+        else:
+            print("Invalid input... Enter only 1, 2, 3 or 4")
 
 
 def update_a_list_item():
