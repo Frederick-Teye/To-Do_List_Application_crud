@@ -615,10 +615,10 @@ def view_by_priority():
 
 def view_by_status():
     while True:
-        user_choice = input("\n1. View pending to-do items\n"
-                            "2. View to-do items that are in progress\n"
-                            "3. View to-do items that are overdue\n"
-                            "4. View to-do items that are completed\n"
+        user_choice = input("\n1. View 'Pending' to-do items\n"
+                            "2. View to-do items that are 'In Progress'\n"
+                            "3. View to-do items that are 'Overdue'\n"
+                            "4. View to-do items that are 'Completed'\n"
                             "Enter your choice here: ").strip()
 
         choices_list = ["1", '2', '3', '4']
@@ -641,7 +641,7 @@ def view_by_status():
                         for row in result:
                             print(f"{row[0]:<4} {row[1]:30} {row[2]:15} {row[3]:6} {row[4]:>18} {row[6]:>12}")
                     else:
-                        print("There is no To-do item that has a pending status...")
+                        print("There is no To-do item that has a 'Pending' status...")
                 except sqlite3.Error as err:
                     print(err)
                 finally:
@@ -651,10 +651,16 @@ def view_by_status():
 
                     # call the menu function, the user might need it
                     print()
-                    will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
-                    if will_you == "m":
-                        print()
-                        menu()
+                    while True:
+                        will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+                        if will_you == "m":
+                            print()
+                            menu()
+                            break
+                        elif will_you == "":
+                            break
+                        else:
+                            print("Invalid input... \n")
                 break
             elif user_choice == "2":
                 conn = None
@@ -682,10 +688,16 @@ def view_by_status():
 
                     # call the menu function, the user might need it
                     print()
-                    will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
-                    if will_you == "m":
-                        print()
-                        menu()
+                    while True:
+                        will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+                        if will_you == "m":
+                            print()
+                            menu()
+                            break
+                        elif will_you == "":
+                            break
+                        else:
+                            print("Invalid input... \n")
                 break
             elif user_choice == "3":
                 conn = None
@@ -713,10 +725,16 @@ def view_by_status():
 
                     # call the menu function, the user might need it
                     print()
-                    will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
-                    if will_you == "m":
-                        print()
-                        menu()
+                    while True:
+                        will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+                        if will_you == "m":
+                            print()
+                            menu()
+                            break
+                        elif will_you == "":
+                            break
+                        else:
+                            print("Invalid input... \n")
                 break
             elif user_choice == "4":
                 conn = None
@@ -744,10 +762,16 @@ def view_by_status():
 
                     # call the menu function, the user might need it
                     print()
-                    will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
-                    if will_you == "m":
-                        print()
-                        menu()
+                    while True:
+                        will_you = input("Hit enter key to continue or 'm' to go to main menu: ").strip().lower()
+                        if will_you == "m":
+                            print()
+                            menu()
+                            break
+                        elif will_you == "":
+                            break
+                        else:
+                            print("Invalid input... \n")
                 break
         else:
             print("Invalid input... Enter only 1, 2, 3 or 4")
